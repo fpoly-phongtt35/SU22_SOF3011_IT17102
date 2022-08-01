@@ -21,9 +21,25 @@ public class Application {
 		//add(p);
 		//update(p);
 		//delete(p);
-		read();
-		Product pp = read(5007);
-		System.out.println(pp);
+		//read();
+//		Product pp = read(5000);
+//		System.out.println(pp);
+		
+		List<Product> products = read("%pp%");
+		for(Product product : products) {
+			System.out.println(product);
+		}
+	}
+	
+	public static List<Product> read(String name) {
+		SessionFactory factory = HibernateUtil.getFactory();
+		Session session = factory.openSession();
+		Query<Product> query = session.createQuery(
+				"FROM Product p WHERE p.name LIKE :name", Product.class);
+		query.setParameter("name", name);
+		List<Product> products = query.getResultList();
+		session.close();
+		return products;
 	}
 	
 	public static Product read(Integer id) {
